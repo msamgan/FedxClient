@@ -1,0 +1,26 @@
+{
+    "name": "msamgan/fedxclient",
+    "description": "Fedex Rest Client",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "msamgan",
+            "email": "mohdsamgankhan@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "msamgan\\FedxClient\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "msamgan\\FedxClient\\FedxClientServiceProvider"
+            ]
+        }
+    }
+}
