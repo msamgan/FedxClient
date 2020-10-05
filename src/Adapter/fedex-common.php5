@@ -6,7 +6,7 @@
  */
 define('Newline', "<br />");
 
-echo 'PHP_Common initialized ';
+//echo 'PHP_Common initialized ';
 function printSuccess($client, $response)
 {
     printReply($client, $response);
