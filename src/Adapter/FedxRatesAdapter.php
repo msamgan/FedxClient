@@ -3,22 +3,34 @@
 namespace msamgan\FedxClient\Adapters;
 
 
-class FedxRatesAdapter
+use Illuminate\Support\Facades\Log;
+use msamgan\FedxClient\Adapters\Adapter;
+
+/**
+ * Class FedxRatesAdapter
+ * @package msamgan\FedxClient\Adapters
+ */
+class FedxRatesAdapter extends Adapter
 {
     /**
      * @var \SoapClient
      */
     protected $client;
 
+    /**
+     * FedxRatesAdapter constructor.
+     */
     public function __construct()
     {
-        require_once(__DIR__ . '/fedex-common.php5');
-        $path_to_wsdl = __DIR__ . "/RateService_v28.wsdl";
-        ini_set("soap.wsdl_cache_enabled", "0");
+        parent::__construct();
 
-        $this->client = new \SoapClient($path_to_wsdl, array('trace' => 1));
-        // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
-
+        $path_to_wsdl = __DIR__ . "/WSDL/RateService_v28.wsdl";
+        try {
+            $this->client = new \SoapClient($path_to_wsdl, array('trace' => 1));
+            // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
+        } catch (\SoapFault $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -131,10 +143,14 @@ class FedxRatesAdapter
     {
         $fedxRateRequest = $this->createRateRequest($fedxRateRequestData);
 
+        //dd($fedxRateRequest);
+
         try {
             if (setEndpoint('changeEndpoint')) {
                 $newLocation = $this->client->__setLocation(setEndpoint('endpoint'));
             }
+
+            dd($this->client->getRates($fedxRateRequest));
 
             return [
                 'status' => true,
