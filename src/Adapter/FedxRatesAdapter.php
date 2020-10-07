@@ -3,9 +3,11 @@
 namespace msamgan\FedxClient\Adapters;
 
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use msamgan\FedxClient\Adapters\Adapter;
 use msamgan\FedxClient\Interfaces\AdapterInterface;
+use msamgan\FedxClient\Models\FedxLog;
 
 /**
  * Class FedxRatesAdapter
@@ -22,16 +24,46 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
     }
 
     /**
-     * @return array|string[]
+     * @param array $fedxRateRequestData
+     * @param bool $log
+     * @return array|JsonResponse|mixed
      */
-    public function version()
+    public function invoke(array $fedxRateRequestData, $log = true)
     {
-        return [
-            'ServiceId' => 'crs',
-            'Major' => '28',
-            'Intermediate' => '0',
-            'Minor' => '0'
-        ];
+        $startTime = time();
+        $fedxRateRequest = $this->createRequest($fedxRateRequestData);
+
+        try {
+            if (setEndpoint('changeEndpoint')) {
+                $newLocation = $this->client->__setLocation(setEndpoint('endpoint'));
+            }
+
+            $response = $this->client->getRates($fedxRateRequest);
+            $executionTime = time() - $startTime;
+
+            if ($log) {
+                $this->invokeLog(
+                    $fedxRateRequest,
+                    $response,
+                    $executionTime
+                );
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Rates Api Hit successfully',
+                'execution_time' => $executionTime,
+                'execution_time_unit' => 'second',
+                'package' => $response
+            ]);
+
+        } catch (SoapFault $exception) {
+            printFault($exception, $this->client);
+            return [
+                'status' => false,
+                'message' => $exception->getMessage(),
+            ];
+        }
     }
 
     /**
@@ -73,10 +105,10 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
         $request['RequestedShipment']['PackageCount'] = count($fedxRateRequestData['parcels']);
         foreach ($fedxRateRequestData['parcels'] as $key => $parcel) {
             $request['RequestedShipment']['RequestedPackageLineItems'][$key] = [
-                    'SequenceNumber' => ($key + 1),
-                    'GroupPackageCount' => ($key + 1),
-                    'Weight' => $parcel['weight'],
-                    'Dimensions' => $parcel['dimensions']
+                'SequenceNumber' => ($key + 1),
+                'GroupPackageCount' => ($key + 1),
+                'Weight' => $parcel['weight'],
+                'Dimensions' => $parcel['dimensions']
             ];
         }
 
@@ -84,30 +116,15 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
     }
 
     /**
-     * @param array $fedxRateRequestData
-     * @return array|mixed
+     * @return array|string[]
      */
-    public function invoke(array $fedxRateRequestData)
+    public function version()
     {
-        $fedxRateRequest = $this->createRequest($fedxRateRequestData);
-
-        try {
-            if (setEndpoint('changeEndpoint')) {
-                $newLocation = $this->client->__setLocation(setEndpoint('endpoint'));
-            }
-
-            return [
-                'status' => true,
-                'message' => 'Rates Api Hit successfully',
-                'package' => $this->client->getRates($fedxRateRequest)
-            ];
-
-        } catch (SoapFault $exception) {
-            printFault($exception, $this->client);
-            return [
-                'status' => false,
-                'message' => $exception->getMessage(),
-            ];
-        }
+        return [
+            'ServiceId' => 'crs',
+            'Major' => '28',
+            'Intermediate' => '0',
+            'Minor' => '0'
+        ];
     }
 }

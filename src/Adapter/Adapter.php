@@ -3,6 +3,7 @@
 namespace msamgan\FedxClient\Adapters;
 
 use Illuminate\Support\Facades\Log;
+use msamgan\FedxClient\Models\FedxLog;
 
 /**
  * Class Adapter
@@ -70,5 +71,20 @@ abstract class Adapter
             'CustomerTransactionId' => time(),
             'CustomerTransactionTimeStamp' => now()
         ];
+    }
+
+    /**
+     * @param $requestData
+     * @param $responseData
+     * @param $executionTime
+     */
+    public function invokeLog($requestData, $responseData, $executionTime)
+    {
+        FedxLog::create([
+            'name' => 'crs',
+            'request' => json_encode($requestData),
+            'response' => json_encode($responseData),
+            'execution_time' => $executionTime
+        ]);
     }
 }
