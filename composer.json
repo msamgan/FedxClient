@@ -14,7 +14,10 @@
     "autoload": {
         "psr-4": {
             "msamgan\\FedxClient\\": "src"
-        }
+        },
+        "files": [
+            "helpers/fedex-common.php5"
+        ]
     },
     "extra": {
         "laravel": {
