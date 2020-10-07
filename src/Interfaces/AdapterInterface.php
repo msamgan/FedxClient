@@ -20,7 +20,7 @@ interface AdapterInterface
     /**
      * @param array $requestData
      * @return mixed
-     * hitting the adapter api.
+     * invoke the adapter api.
      */
-    public function acquire(array $requestData);
+    public function invoke(array $requestData);
 }

@@ -84,10 +84,10 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
     }
 
     /**
-     * @param $fedxRateRequestData
-     * @return array|string
+     * @param array $fedxRateRequestData
+     * @return array|mixed
      */
-    public function acquire($fedxRateRequestData)
+    public function invoke(array $fedxRateRequestData)
     {
         $fedxRateRequest = $this->createRequest($fedxRateRequestData);
 
