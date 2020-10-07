@@ -2,14 +2,33 @@
 
 namespace msamgan\FedxClient\Adapters;
 
-class Adapter
+use Illuminate\Support\Facades\Log;
+
+/**
+ * Class Adapter
+ * @package msamgan\FedxClient\Adapters
+ */
+abstract class Adapter
 {
     /**
-     * Adapter constructor.
+     * @var \SoapClient
      */
-    public function __construct()
+    protected $client;
+
+    /**
+     * Adapter constructor.
+     * @param $pathToWsdl
+     */
+    public function __construct($pathToWsdl)
     {
         ini_set("soap.wsdl_cache_enabled", "0");
+
+        try {
+            $this->client = new \SoapClient($pathToWsdl, array('trace' => 1));
+            // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
+        } catch (\SoapFault $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**

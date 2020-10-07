@@ -5,36 +5,24 @@ namespace msamgan\FedxClient\Adapters;
 
 use Illuminate\Support\Facades\Log;
 use msamgan\FedxClient\Adapters\Adapter;
+use msamgan\FedxClient\Interfaces\AdapterInterface;
 
 /**
  * Class FedxRatesAdapter
  * @package msamgan\FedxClient\Adapters
  */
-class FedxRatesAdapter extends Adapter
+class FedxRatesAdapter extends Adapter implements AdapterInterface
 {
-    /**
-     * @var \SoapClient
-     */
-    protected $client;
-
     /**
      * FedxRatesAdapter constructor.
      */
     public function __construct()
     {
-        parent::__construct();
-
-        $path_to_wsdl = __DIR__ . "/WSDL/RateService_v28.wsdl";
-        try {
-            $this->client = new \SoapClient($path_to_wsdl, array('trace' => 1));
-            // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
-        } catch (\SoapFault $e) {
-            Log::error($e->getMessage());
-        }
+        parent::__construct(__DIR__ . "/WSDL/RateService_v28.wsdl");
     }
 
     /**
-     * @return string[]
+     * @return array|string[]
      */
     public function version()
     {
@@ -47,10 +35,10 @@ class FedxRatesAdapter extends Adapter
     }
 
     /**
-     * @param $fedxRateRequestData
-     * @return mixed
+     * @param array $fedxRateRequestData
+     * @return array|mixed
      */
-    public function createRateRequest($fedxRateRequestData)
+    public function createRequest(array $fedxRateRequestData)
     {
         $request['WebAuthenticationDetail'] = $this->webAuthenticationDetail();
         $request['ClientDetail'] = $this->clientDetail();
@@ -99,9 +87,9 @@ class FedxRatesAdapter extends Adapter
      * @param $fedxRateRequestData
      * @return array|string
      */
-    public function getRates($fedxRateRequestData)
+    public function acquire($fedxRateRequestData)
     {
-        $fedxRateRequest = $this->createRateRequest($fedxRateRequestData);
+        $fedxRateRequest = $this->createRequest($fedxRateRequestData);
 
         try {
             if (setEndpoint('changeEndpoint')) {
