@@ -87,4 +87,16 @@ abstract class Adapter
             'execution_time' => $executionTime
         ]);
     }
+
+    /**
+     * @return mixed
+     */
+    public function baseRequest()
+    {
+        $request['WebAuthenticationDetail'] = $this->webAuthenticationDetail();
+        $request['ClientDetail'] = $this->clientDetail();
+        $request['TransactionDetail'] = $this->transactionDetail();
+
+        return $request;
+    }
 }

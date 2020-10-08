@@ -57,7 +57,7 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
                 'package' => $response
             ]);
 
-        } catch (SoapFault $exception) {
+        } catch (\SoapFault $exception) {
             printFault($exception, $this->client);
             return [
                 'status' => false,
@@ -72,9 +72,7 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
      */
     public function createRequest(array $fedxRateRequestData)
     {
-        $request['WebAuthenticationDetail'] = $this->webAuthenticationDetail();
-        $request['ClientDetail'] = $this->clientDetail();
-        $request['TransactionDetail'] = $this->transactionDetail();
+        $request = $this->baseRequest();
         $request['Version'] = $this->version();
 
         $request['ReturnTransitAndCommit'] = true;
