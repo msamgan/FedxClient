@@ -59,7 +59,6 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
             ]);
 
         } catch (\SoapFault $exception) {
-            printFault($exception, $this->client);
             return [
                 'status' => false,
                 'message' => $exception->getMessage(),
