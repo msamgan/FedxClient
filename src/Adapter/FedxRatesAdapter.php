@@ -43,6 +43,7 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
 
             if ($log) {
                 $this->invokeLog(
+                    'crs',
                     $fedxRateRequest,
                     $response,
                     $executionTime

@@ -2,6 +2,7 @@
 
 namespace msamgan\FedxClient\Adapters;
 
+use Illuminate\Http\JsonResponse;
 use msamgan\FedxClient\Adapters\Adapter;
 use msamgan\FedxClient\Interfaces\AdapterInterface;
 
@@ -18,7 +19,12 @@ class FedexShippingLabelAdapter extends Adapter implements AdapterInterface
         parent::__construct(__DIR__ . "/WSDL/ShipService_v26.wsdl");
     }
 
-    public function invoke(array $requestData)
+    /**
+     * @param array $requestData
+     * @param bool $log
+     * @return array|JsonResponse|mixed
+     */
+    public function invoke(array $requestData, $log = true)
     {
         $startTime = time();
         $fedxShippingLabelRequest = $this->createRequest($requestData);
@@ -28,30 +34,26 @@ class FedexShippingLabelAdapter extends Adapter implements AdapterInterface
                 $newLocation = $this->client->__setLocation(setEndpoint('endpoint'));
             }
 
-            $response = $this->client->processShipment($fedxShippingLabelRequest); // FedEx web service invocation
+            $response = $this->client->processShipment($fedxShippingLabelRequest);
             $executionTime = time() - $startTime;
 
-            if ($response->HighestSeverity != 'FAILURE' && $response->HighestSeverity != 'ERROR') {
-                //printSuccess($this->client, $response);
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Rates Api Hit successfully',
-                    'execution_time' => $executionTime,
-                    'execution_time_unit' => 'second',
-                    'package' => $response
-                ]);
-
-                // Create PNG or PDF label
-                // Set LabelSpecification.ImageType to 'PDF' for generating a PDF label
-                /*  $fp = fopen(SHIP_LABEL, 'wb');
-                  fwrite($fp, ($response->CompletedShipmentDetail->CompletedPackageDetails->Label->Parts->Image));
-                  fclose($fp);
-                  echo 'Label <a href="./'.SHIP_LABEL.'">'.SHIP_LABEL.'</a> was generated.';*/
-            } else {
-                printError($this->client, $response);
+            if ($log) {
+                $this->invokeLog(
+                    'ship',
+                    $fedxShippingLabelRequest,
+                    $response,
+                    $executionTime
+                );
             }
-            //writeToLog($this->client);    // Write to log file
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Shippment Label Api Hit successfully',
+                'execution_time' => $executionTime,
+                'execution_time_unit' => 'second',
+                'package' => $response
+            ]);
+
         } catch (\SoapFault $exception) {
             printFault($exception, $this->client);
             return [

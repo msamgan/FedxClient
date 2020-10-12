@@ -1,6 +1,6 @@
 <?php
 
-namespace msamgan\FedxClient;
+namespace fedxClientProviders;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -13,6 +13,6 @@ class FedxClientServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '../migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/migrations');
     }
 }

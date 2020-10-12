@@ -74,14 +74,15 @@ abstract class Adapter
     }
 
     /**
+     * @param $name
      * @param $requestData
      * @param $responseData
      * @param $executionTime
      */
-    public function invokeLog($requestData, $responseData, $executionTime)
+    public function invokeLog($name, $requestData, $responseData, $executionTime)
     {
         FedxLog::create([
-            'name' => 'crs',
+            'name' => $name,
             'request' => json_encode($requestData),
             'response' => json_encode($responseData),
             'execution_time' => $executionTime

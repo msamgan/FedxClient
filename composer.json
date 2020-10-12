@@ -17,12 +17,15 @@
         },
         "files": [
             "helpers/fedex-common.php5"
+        ],
+        "classmap": [
+            "FedxClientServiceProvider.php"
         ]
     },
     "extra": {
         "laravel": {
             "providers": [
-                "msamgan\\FedxClient\\FedxClientServiceProvider"
+                "fedxClientProviders\\FedxClientServiceProvider"
             ]
         }
     }
