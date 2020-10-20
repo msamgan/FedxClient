@@ -17,7 +17,7 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
      */
     public function __construct()
     {
-        parent::__construct(__DIR__ . "/WSDL/RateService_v28.wsdl");
+        parent::__construct(__DIR__ . "/WSDL/TrackService_v19.wsdl");
     }
 
     /**
@@ -40,6 +40,7 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
 
             if ($log) {
                 $this->invokeLog(
+                    'trck',
                     $fedxTrackRequest,
                     $response,
                     $executionTime
@@ -48,39 +49,12 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
 
             return response()->json([
                 'status' => true,
-                'message' => 'Rates Api Hit successfully',
+                'message' => 'Track Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
                 'package' => $response
             ]);
-
-            /*if ($response -> HighestSeverity != 'FAILURE' && $response -> HighestSeverity != 'ERROR'){
-                if($response->HighestSeverity != 'SUCCESS'){
-                    echo '<table border="1">';
-                    echo '<tr><th>Track Reply</th><th>&nbsp;</th></tr>';
-                    trackDetails($response->Notifications, '');
-                    echo '</table>';
-                }else{
-                    if ($response->CompletedTrackDetails->HighestSeverity != 'SUCCESS'){
-                        echo '<table border="1">';
-                        echo '<tr><th>Shipment Level Tracking Details</th><th>&nbsp;</th></tr>';
-                        trackDetails($response->CompletedTrackDetails, '');
-                        echo '</table>';
-                    }else{
-                        echo '<table border="1">';
-                        echo '<tr><th>Package Level Tracking Details</th><th>&nbsp;</th></tr>';
-                        trackDetails($response->CompletedTrackDetails->TrackDetails, '');
-                        echo '</table>';
-                    }
-                }
-                printSuccess($this->client, $response);
-            }else{
-                printError($this->client, $response);
-            }
-
-            writeToLog($this->client);*/    // Write to log file
         } catch (\SoapFault $exception) {
-            printFault($exception, $this->client);
             return [
                 'status' => false,
                 'message' => $exception->getMessage(),
