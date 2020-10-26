@@ -19,8 +19,9 @@ interface AdapterInterface
 
     /**
      * @param array $requestData
+     * @param bool $log
      * @return mixed
      * invoke the adapter api.
      */
-    public function invoke(array $requestData);
+    public function invoke(array $requestData, $log = true);
 }
