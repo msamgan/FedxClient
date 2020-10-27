@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Msamgan\FedxClient\Models\FedxLog;
 
 /**
- * Class Adapter
+ * Class Adapters
  * @package Msamgan\FedxClient\Adapters
  */
 abstract class Adapter
@@ -17,7 +17,7 @@ abstract class Adapter
     protected $client;
 
     /**
-     * Adapter constructor.
+     * Adapters constructor.
      * @param $pathToWsdl
      */
     public function __construct($pathToWsdl)
