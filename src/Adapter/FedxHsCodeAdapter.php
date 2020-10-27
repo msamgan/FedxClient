@@ -1,11 +1,11 @@
 <?php
 
 
-namespace msamgan\FedxClient\Adapters;
+namespace Msamgan\FedxClient\Adapters;
 
 
 use Illuminate\Http\JsonResponse;
-use msamgan\FedxClient\Interfaces\AdapterInterface;
+use Msamgan\FedxClient\Interfaces\AdapterInterface;
 
 class FedxHsCodeAdapter extends Adapter implements AdapterInterface
 {

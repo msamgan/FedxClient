@@ -1,17 +1,17 @@
 <?php
 
-namespace msamgan\FedxClient\Adapters;
+namespace Msamgan\FedxClient\Adapters;
 
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use msamgan\FedxClient\Adapters\Adapter;
-use msamgan\FedxClient\Interfaces\AdapterInterface;
-use msamgan\FedxClient\Models\FedxLog;
+use Msamgan\FedxClient\Adapters\Adapter;
+use Msamgan\FedxClient\Interfaces\AdapterInterface;
+use Msamgan\FedxClient\Models\FedxLog;
 
 /**
  * Class FedxRatesAdapter
- * @package msamgan\FedxClient\Adapters
+ * @package Msamgan\FedxClient\Adapters
  */
 class FedxRatesAdapter extends Adapter implements AdapterInterface
 {

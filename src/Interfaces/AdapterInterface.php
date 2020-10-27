@@ -1,6 +1,6 @@
 <?php
 
-namespace msamgan\FedxClient\Interfaces;
+namespace Msamgan\FedxClient\Interfaces;
 
 interface AdapterInterface
 {

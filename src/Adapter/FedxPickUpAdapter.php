@@ -1,10 +1,10 @@
 <?php
 
 
-namespace msamgan\FedxClient\Adapters;
+namespace Msamgan\FedxClient\Adapters;
 
 
-use msamgan\FedxClient\Interfaces\AdapterInterface;
+use Msamgan\FedxClient\Interfaces\AdapterInterface;
 
 class FedxPickUpAdapter extends Adapter implements AdapterInterface
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace msamgan\FedxClient\Adapters;
+namespace Msamgan\FedxClient\Adapters;
 
 use Illuminate\Support\Facades\Log;
-use msamgan\FedxClient\Models\FedxLog;
+use Msamgan\FedxClient\Models\FedxLog;
 
 /**
  * Class Adapter
- * @package msamgan\FedxClient\Adapters
+ * @package Msamgan\FedxClient\Adapters
  */
 abstract class Adapter
 {

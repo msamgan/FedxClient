@@ -1,10 +1,10 @@
 <?php
 
-namespace msamgan\FedxClient\Adapters;
+namespace Msamgan\FedxClient\Adapters;
 
 use Illuminate\Http\JsonResponse;
-use msamgan\FedxClient\Adapters\Adapter;
-use msamgan\FedxClient\Interfaces\AdapterInterface;
+use Msamgan\FedxClient\Adapters\Adapter;
+use Msamgan\FedxClient\Interfaces\AdapterInterface;
 
 /**
  * Class FedexShippingLabelAdapter

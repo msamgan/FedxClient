@@ -1,14 +1,14 @@
 <?php
 
 
-namespace msamgan\FedxClient\Adapters;
+namespace Msamgan\FedxClient\Adapters;
 
 use Illuminate\Http\JsonResponse;
-use msamgan\FedxClient\Interfaces\AdapterInterface;
+use Msamgan\FedxClient\Interfaces\AdapterInterface;
 
 /**
  * Class FedxTrackAdapter
- * @package msamgan\FedxClient\Adapters
+ * @package Msamgan\FedxClient\Adapters
  */
 class FedxTrackAdapter extends Adapter implements AdapterInterface
 {
