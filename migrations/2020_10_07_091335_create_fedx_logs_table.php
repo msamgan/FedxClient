@@ -17,7 +17,7 @@ class CreateFedxLogsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('request');
-            $table->text('response');
+            $table->longText('response');
             $table->text('execution_time')->comment('in seconds');
             $table->timestamps();
         });
