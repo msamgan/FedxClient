@@ -22,10 +22,10 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
 
     /**
      * @param array $requestData
-     * @param false $log
+     * @param true $log
      * @return array|JsonResponse|mixed
      */
-    public function invoke(array $requestData, $log = false)
+    public function invoke(array $requestData, $log = true)
     {
         $startTime = time();
         $fedxTrackRequest = $this->createRequest($requestData);
