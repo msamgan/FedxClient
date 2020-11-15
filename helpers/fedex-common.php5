@@ -226,7 +226,7 @@ function getProperty($var)
 function setEndpoint($var)
 {
     if ($var == 'changeEndpoint') return true;
-    if ($var == 'endpoint') return ' https://ws.fedex.com:443/web-services';
+    if ($var == 'endpoint') return env('FEDX_ACTION_URL');
 }
 
 function printNotifications($notes)
