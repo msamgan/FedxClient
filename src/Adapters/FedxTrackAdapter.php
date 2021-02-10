@@ -79,8 +79,9 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
             //'ShipDateRangeBegin' => getProperty('begindate'),
             //'ShipDateRangeEnd' => getProperty('enddate'),
             'ShipmentAccountNumber' => getProperty('trackaccount'), // Replace with account used for shipment
-            'ProcessingOptions' => 'INCLUDE_DETAILED_SCANS'
         );
+
+        $request['ProcessingOptions'] = 'INCLUDE_DETAILED_SCANS';
 
         return $request;
     }
