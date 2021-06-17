@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Msamgan\FedxClient\Adapters\Adapter;
 use Msamgan\FedxClient\Interfaces\AdapterInterface;
 use Msamgan\FedxClient\Models\FedxLog;
+use SoapFault;
 
 /**
  * Class FedxRatesAdapter
@@ -41,8 +42,9 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
             $response = $this->client->getRates($fedxRateRequest);
             $executionTime = time() - $startTime;
 
+            $logData = null;
             if ($log) {
-                $this->invokeLog(
+                $logData = $this->invokeLog(
                     'crs',
                     $fedxRateRequest,
                     $response,
@@ -55,10 +57,11 @@ class FedxRatesAdapter extends Adapter implements AdapterInterface
                 'message' => 'Rates Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
+                'log' => $logData,
                 'package' => $response
             ]);
 
-        } catch (\SoapFault $exception) {
+        } catch (SoapFault $exception) {
             return [
                 'status' => false,
                 'message' => $exception->getMessage(),

@@ -30,8 +30,6 @@ class FedxUploadAdapter extends Adapter implements AdapterInterface
         $startTime = time();
         $fedxUploadDocRequest = $this->createRequest($requestData);
 
-        dd($fedxUploadDocRequest);
-
         try {
             if (setEndpoint('changeEndpoint')) {
                 $newLocation = $this->client->__setLocation(setEndpoint('endpoint'));
@@ -40,8 +38,9 @@ class FedxUploadAdapter extends Adapter implements AdapterInterface
             $response = $this->client->uploadDocuments($fedxUploadDocRequest);
             $executionTime = time() - $startTime;
 
+            $logData = null;
             if ($log) {
-                $this->invokeLog(
+                $logData = $this->invokeLog(
                     'cdus',
                     $fedxUploadDocRequest,
                     $response,
@@ -51,9 +50,10 @@ class FedxUploadAdapter extends Adapter implements AdapterInterface
 
             return response()->json([
                 'status' => true,
-                'message' => 'Track Api Hit successfully',
+                'message' => 'Upload Document Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
+                'log' => $logData,
                 'package' => $response
             ]);
 

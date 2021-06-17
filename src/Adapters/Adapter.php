@@ -78,10 +78,11 @@ abstract class Adapter
      * @param $requestData
      * @param $responseData
      * @param $executionTime
+     * @return mixed
      */
     public function invokeLog($name, $requestData, $responseData, $executionTime)
     {
-        FedxLog::create([
+        return FedxLog::create([
             'name' => $name,
             'request' => json_encode($requestData),
             'response' => json_encode($responseData),

@@ -5,6 +5,7 @@ namespace Msamgan\FedxClient\Adapters;
 
 use Illuminate\Http\JsonResponse;
 use Msamgan\FedxClient\Interfaces\AdapterInterface;
+use SoapFault;
 
 /**
  * Class FedxTrackAdapter
@@ -38,8 +39,9 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
             $response = $this->client->track($fedxTrackRequest);
             $executionTime = time() - $startTime;
 
+            $logData = null;
             if ($log) {
-                $this->invokeLog(
+                $logData = $this->invokeLog(
                     'trck',
                     $fedxTrackRequest,
                     $response,
@@ -52,9 +54,10 @@ class FedxTrackAdapter extends Adapter implements AdapterInterface
                 'message' => 'Track Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
+                'log' => $logData,
                 'package' => $response
             ]);
-        } catch (\SoapFault $exception) {
+        } catch (SoapFault $exception) {
             return [
                 'status' => false,
                 'message' => $exception->getMessage(),

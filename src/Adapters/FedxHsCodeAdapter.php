@@ -6,6 +6,7 @@ namespace Msamgan\FedxClient\Adapters;
 
 use Illuminate\Http\JsonResponse;
 use Msamgan\FedxClient\Interfaces\AdapterInterface;
+use SoapFault;
 
 class FedxHsCodeAdapter extends Adapter implements AdapterInterface
 {
@@ -36,8 +37,9 @@ class FedxHsCodeAdapter extends Adapter implements AdapterInterface
 
             $executionTime = time() - $startTime;
 
+            $logData = null;
             if ($log) {
-                $this->invokeLog(
+                $logData = $this->invokeLog(
                     'hssearch',
                     $fedxHsCodeRequest,
                     $response,
@@ -50,9 +52,10 @@ class FedxHsCodeAdapter extends Adapter implements AdapterInterface
                 'message' => 'Track Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
+                'log' => $logData,
                 'package' => $response
             ]);
-        } catch (\SoapFault $exception) {
+        } catch (SoapFault $exception) {
             dump($exception);
             return [
                 'status' => false,

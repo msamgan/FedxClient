@@ -83,8 +83,10 @@ class FedxPickUpAdapter extends Adapter implements AdapterInterface
             $response = $this->client ->createPickup($fedxPickUpRequest);
             $executionTime = time() - $startTime;
 
+            $logData = null;
             if ($log) {
-                $this->invokeLog(
+                $logData = $this->invokeLog(
+                    'pickup',
                     $fedxPickUpRequest,
                     $response,
                     $executionTime
@@ -96,6 +98,7 @@ class FedxPickUpAdapter extends Adapter implements AdapterInterface
                 'message' => 'Rates Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
+                'log' => $logData,
                 'package' => $response
             ]);
 

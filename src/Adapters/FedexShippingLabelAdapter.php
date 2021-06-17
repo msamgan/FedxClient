@@ -5,6 +5,7 @@ namespace Msamgan\FedxClient\Adapters;
 use Illuminate\Http\JsonResponse;
 use Msamgan\FedxClient\Adapters\Adapter;
 use Msamgan\FedxClient\Interfaces\AdapterInterface;
+use SoapFault;
 
 /**
  * Class FedexShippingLabelAdapter
@@ -37,8 +38,9 @@ class FedexShippingLabelAdapter extends Adapter implements AdapterInterface
             $response = $this->client->processShipment($fedxShippingLabelRequest);
             $executionTime = time() - $startTime;
 
+            $logData = null;
             if ($log) {
-                $this->invokeLog(
+                $logData = $this->invokeLog(
                     'ship',
                     $fedxShippingLabelRequest,
                     $response,
@@ -51,10 +53,11 @@ class FedexShippingLabelAdapter extends Adapter implements AdapterInterface
                 'message' => 'Shippment Label Api Hit successfully',
                 'execution_time' => $executionTime,
                 'execution_time_unit' => 'second',
+                'log' => $logData,
                 'package' => $response
             ]);
 
-        } catch (\SoapFault $exception) {
+        } catch (SoapFault $exception) {
             return [
                 'status' => false,
                 'message' => $exception->getMessage(),
